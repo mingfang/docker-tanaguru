@@ -21,26 +21,29 @@ RUN add-apt-repository ppa:webupd8team/java -y && \
     apt-get install -y oracle-java8-installer
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
-RUN apt-get install -y mysql-server-5.5 
+#MySQL
+RUN apt-get install -y mysql-server
 
-RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-3.1.0.i386.tar.gz | tar zx
-
-RUN apt-get install -y libmysql-java --no-install-recommends
-RUN apt-get install -y libspring-instrument-java --no-install-recommends
+#Xvfb
 RUN apt-get install -y xvfb
+
+#Firefox
 RUN wget -O - http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/31.4.0esr/linux-x86_64/en-US/firefox-31.4.0esr.tar.bz2 | tar xj
-
-RUN mv tanaguru* tanaguru
-
-COPY my.cnf /etc/mysql/
 
 #tomcat
 RUN wget -O - http://www.us.apache.org/dist/tomcat/tomcat-7/v7.0.64/bin/apache-tomcat-7.0.64.tar.gz | tar zx
 RUN mv *tomcat* tomcat
+RUN apt-get install -y libmysql-java --no-install-recommends
+RUN apt-get install -y libspring-instrument-java --no-install-recommends
 RUN ln -s /usr/share/java/spring3-instrument-tomcat.jar /tomcat/lib/spring3-instrument-tomcat.jar
 RUN ln -s /usr/share/java/mysql-connector-java.jar /tomcat/lib/mysql-connector-java.jar
 
+#Tanaguru
+RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-3.1.0.i386.tar.gz | tar zx
+RUN mv tanaguru* tanaguru
+
 #setup
+COPY my.cnf /etc/mysql/
 COPY tanaguru.ddl /
 RUN mysqld_safe & mysqladmin --wait=5 ping && \
     mysql < tanaguru.ddl && \
