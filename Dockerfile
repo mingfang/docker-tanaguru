@@ -27,7 +27,16 @@ RUN apt-get install -y mysql-server
 #Xvfb
 RUN apt-get install -y xvfb
 
-#Firefox
+#required by java
+RUN apt-get install -y libxi6 libxtst6 libxrender1
+
+#required by xvfb
+RUN apt-get -y install fonts-ipafont-gothic xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable ttf-ubuntu-font-family libfreetype6 libfontconfig
+
+#required by firefox
+RUN apt-get install -y dbus-x11 libasound2 libgtk2.0-0
+
+#Firefox, note: MUST use this version only
 RUN wget -O - http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/31.4.0esr/linux-x86_64/en-US/firefox-31.4.0esr.tar.bz2 | tar xj
 
 #tomcat
@@ -59,6 +68,9 @@ RUN mysqld_safe & mysqladmin --wait=5 ping && \
                   --firefox-esr-path /firefox/firefox \
                   --display_port ":99" && \
     mysqladmin shutdown
+
+ENV DISPLAY=:99
+ENV PATH=$PATH:/firefox
 
 #hack to get tanaguru to work
 RUN cp /etc/tanaguru/* /tomcat/webapps/tanaguru/WEB-INF/classes/
