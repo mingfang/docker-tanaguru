@@ -48,7 +48,7 @@ RUN ln -s /usr/share/java/spring3-instrument-tomcat.jar /tomcat/lib/spring3-inst
 RUN ln -s /usr/share/java/mysql-connector-java.jar /tomcat/lib/mysql-connector-java.jar
 
 #Tanaguru
-RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-3.1.0.i386.tar.gz | tar zx
+RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-latest.tar.gz | tar zx
 RUN mv tanaguru* tanaguru
 
 #setup
