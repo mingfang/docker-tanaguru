@@ -40,7 +40,7 @@ RUN apt-get install -y dbus-x11 libasound2 libgtk2.0-0
 RUN wget -O - http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/31.4.0esr/linux-x86_64/en-US/firefox-31.4.0esr.tar.bz2 | tar xj
 
 #tomcat
-RUN wget -O - http://www.us.apache.org/dist/tomcat/tomcat-7/v7.0.64/bin/apache-tomcat-7.0.64.tar.gz | tar zx
+RUN wget -O - http://www-us.apache.org/dist/tomcat/tomcat-7/v7.0.68/bin/apache-tomcat-7.0.68.tar.gz | tar zx
 RUN mv *tomcat* tomcat
 RUN apt-get install -y libmysql-java --no-install-recommends
 RUN apt-get install -y libspring-instrument-java --no-install-recommends
