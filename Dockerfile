@@ -40,7 +40,7 @@ RUN apt-get install -y dbus-x11 libasound2 libgtk2.0-0
 RUN wget -O - http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/31.4.0esr/linux-x86_64/en-US/firefox-31.4.0esr.tar.bz2 | tar xj
 
 #tomcat
-RUN wget -O - http://www.us.apache.org/dist/tomcat/tomcat-7/v7.0.64/bin/apache-tomcat-7.0.64.tar.gz | tar zx
+RUN wget -O - http://www-us.apache.org/dist/tomcat/tomcat-7/v7.0.68/bin/apache-tomcat-7.0.68.tar.gz | tar zx
 RUN mv *tomcat* tomcat
 RUN apt-get install -y libmysql-java --no-install-recommends
 RUN apt-get install -y libspring-instrument-java --no-install-recommends
@@ -48,12 +48,15 @@ RUN ln -s /usr/share/java/spring3-instrument-tomcat.jar /tomcat/lib/spring3-inst
 RUN ln -s /usr/share/java/mysql-connector-java.jar /tomcat/lib/mysql-connector-java.jar
 
 #Tanaguru
-RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-3.1.0.i386.tar.gz | tar zx
+RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-latest.tar.gz | tar zx
 RUN mv tanaguru* tanaguru
 
 #setup
+RUN wget https://raw.githubusercontent.com/fhalna/docker-tanaguru-1/master/my.cnf
+RUN wget https://raw.githubusercontent.com/fhalna/docker-tanaguru-1/master/tanaguru.ddl
+
 COPY my.cnf /etc/mysql/
-COPY tanaguru.ddl /
+
 RUN mysqld_safe & mysqladmin --wait=5 ping && \
     mysql < tanaguru.ddl && \
     cd /tanaguru && \
@@ -78,4 +81,3 @@ ENV CATALINA_OPTS="-DconfDir=/WEB-INF/classes"
 
 #Add runit services
 COPY sv /etc/service 
-
