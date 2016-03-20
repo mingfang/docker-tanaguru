@@ -52,8 +52,11 @@ RUN wget -O - http://download.tanaguru.org/Tanaguru/tanaguru-latest.tar.gz | tar
 RUN mv tanaguru* tanaguru
 
 #setup
+RUN wget https://raw.githubusercontent.com/fhalna/docker-tanaguru-1/master/my.cnf
+RUN wget https://raw.githubusercontent.com/fhalna/docker-tanaguru-1/master/tanaguru.ddl
+
 COPY my.cnf /etc/mysql/
-COPY tanaguru.ddl /
+
 RUN mysqld_safe & mysqladmin --wait=5 ping && \
     mysql < tanaguru.ddl && \
     cd /tanaguru && \
@@ -78,4 +81,3 @@ ENV CATALINA_OPTS="-DconfDir=/WEB-INF/classes"
 
 #Add runit services
 COPY sv /etc/service 
-
